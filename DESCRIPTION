@@ -1,0 +1,14 @@
+Package: mypackage
+Title: Project 3 Package for STAT 302
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Kobe",
+           family = "Sarausad",
+           role = c("aut", "cre"),
+           email = "klobby19@gmail.com")
+Description: This is the package for project 3.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
