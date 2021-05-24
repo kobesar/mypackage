@@ -3,6 +3,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/kobesar/mypackage/workflows/R-CMD-check/badge.svg)](https://github.com/kobesar/mypackage/actions)
+[![codecov](https://codecov.io/gh/kobesar/mypackage/branch/master/graph/badge.svg?token=S8EMZ6M8YC)](https://codecov.io/gh/kobesar/mypackage)
 <!-- badges: end -->
 
 The goal of mypackage is to ...
