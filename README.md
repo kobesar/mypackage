@@ -12,7 +12,7 @@ The goal of mypackage is to ...
 You can install the released version of mypackage from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("mypackage")
+devtools::install_github("kobesar/mypackage")
 ```
 
 ## Example
