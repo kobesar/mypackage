@@ -1,8 +1,9 @@
 ---
 title: "Project 3: PACKAGE_NAME mypackage"
+author: "Kobe Sarausad"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Project 3: PACKAGE_NAME mypackage}
+  %\VignetteIndexEntry{mypackage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
