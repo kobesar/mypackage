@@ -1,3 +1,4 @@
+#' @importFrom stats
 #' linear model
 #'
 #' This function applies the linear regression
@@ -40,7 +41,7 @@ my_lm <- function(formula, data) {
   t <- beta / beta_se
 
   # Compute p-value for t-test
-  p <- pt(abs(t), df, lower.tail = FALSE) * 2
+  p <- stats::pt(abs(t), df, lower.tail = FALSE) * 2
 
   # Combine all the necessary values into a vector
   result <- cbind(beta, beta_se, t, p)

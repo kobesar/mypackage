@@ -1,3 +1,4 @@
+#' @import tidyverse, randomForest
 #' random forest cross validation
 #'
 #' This function applies random forest cross validation to penguins
@@ -37,7 +38,7 @@ my_rf_cv <- function(k) {
     data_test_mass <- data_test$body_mass_g # Select the target output
 
     # Random forest model
-    tree <- randomForest(
+    tree <- randomForest::randomForest(
       body_mass_g ~ bill_length_mm + bill_depth_mm + flipper_length_mm,
       data = data_train, ntree = 100)
 

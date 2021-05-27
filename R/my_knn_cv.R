@@ -1,3 +1,4 @@
+#' @import class
 #' k-nearest neighbors cross validation
 #'
 #' This function applies k-nearest neighbors cross validation to given
@@ -37,7 +38,7 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
     data_test_labs <- data_test$labels # Select labels
 
     # Prediction of testing labels using knn
-    pred <- as.character(knn(data_train[, 1:(length(data)-3)],
+    pred <- as.character(class::knn(data_train[, 1:(length(data)-3)],
                              data_test[, 1:(length(data)-3)],
                              cl = data_train_labs, k = k_nn))
 

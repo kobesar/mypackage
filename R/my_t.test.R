@@ -1,3 +1,4 @@
+#' @import stats
 #' t-test
 #'
 #' This function applies the t-test
