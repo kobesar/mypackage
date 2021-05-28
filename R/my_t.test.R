@@ -1,4 +1,3 @@
-#' @import stats
 #' t-test
 #'
 #' This function applies the t-test
@@ -23,7 +22,7 @@ my_t.test <- function(x, alternative, mu) {
   }
 
   # Compute standard error
-  se <- sd(x) / sqrt(length(x))
+  se <- stats::sd(x) / sqrt(length(x))
 
   # Compute the mean of vector
   x_bar <- mean(x)
@@ -36,11 +35,11 @@ my_t.test <- function(x, alternative, mu) {
 
   # Compute area under curve
   if (alternative == "less") { # Check if alternative is less
-    p <- pt(t, df, lower.tail = TRUE) # Compute area of lower tail
+    p <- stats::pt(t, df, lower.tail = TRUE) # Compute area of lower tail
   } else if (alternative == "greater") { # Check if alternative is greater
-    p <- pt(t, df, lower.tail = FALSE) # Compute area of upper tail
+    p <- stats::pt(t, df, lower.tail = FALSE) # Compute area of upper tail
   } else { # If alternative is two tailed
-    p <- pt(abs(t), df, lower.tail = FALSE) * 2 # Compute area of upper tail and multiply by 2.
+    p <- stats::pt(abs(t), df, lower.tail = FALSE) * 2 # Compute area of upper tail and multiply by 2.
   }
 
   # Make list of all the components

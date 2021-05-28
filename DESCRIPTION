@@ -19,9 +19,9 @@ Suggests:
 Config/testthat/edition: 3
 Depends: 
     R (>= 2.10)
-Imports:
-    stats,
-    class,
-    randomForest,
-    tidyverse
 VignetteBuilder: knitr
+Imports: 
+    stats,
+    dplyr,
+    class,
+    randomForest

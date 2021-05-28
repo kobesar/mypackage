@@ -1,4 +1,3 @@
-#' @import tidyverse, randomForest
 #' random forest cross validation
 #'
 #' This function applies random forest cross validation to penguins
@@ -16,7 +15,9 @@
 #' @export
 my_rf_cv <- function(k) {
   # Load in penguin data
-  penguins <- na.omit(penguins)
+  my_penguins <- load("my_penguins")
+
+  penguins <- stats::na.omit(my_penguins)
 
   # Sets seed of random number generator
   set.seed(302)
@@ -43,7 +44,7 @@ my_rf_cv <- function(k) {
       data = data_train, ntree = 100)
 
     # Record predictions of model
-    pred <- predict(tree, data_test[1:3])
+    pred <- stats::predict(tree, data_test[1:3])
 
     # Compute mean squared error of predictions
     mse <- (pred - data_test_mass)^2

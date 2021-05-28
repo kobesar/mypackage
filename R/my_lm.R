@@ -1,4 +1,3 @@
-#' @importFrom stats
 #' linear model
 #'
 #' This function applies the linear regression
@@ -17,13 +16,13 @@
 my_lm <- function(formula, data) {
 
   # Compute model matrix
-  x <- model.matrix(formula, data)
+  x <- stats::model.matrix(formula, data)
 
   # Compute model frame
-  model <- model.frame(formula, data)
+  model <- stats::model.frame(formula, data)
 
   # Compute model response
-  y <- model.response(model)
+  y <- stats::model.response(model)
 
   # Compute regression coefficients
   beta <- solve((t(x) %*% x)) %*% t(x) %*% y

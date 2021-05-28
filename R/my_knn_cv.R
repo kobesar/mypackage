@@ -1,4 +1,3 @@
-#' @import class
 #' k-nearest neighbors cross validation
 #'
 #' This function applies k-nearest neighbors cross validation to given
@@ -13,6 +12,8 @@
 #' @return List of predictions and cross validation error
 #'
 #' @examples
+#' penguins <- get("my_penguins")
+#'
 #' my_knn_cv(penguins[, 3:6], penguins$species, 5, 5)
 #'
 #' @export
@@ -37,9 +38,11 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
     data_train_labs <- data_train$labels # Select labels
     data_test_labs <- data_test$labels # Select labels
 
+    last_index <- length(data) - 3
+
     # Prediction of testing labels using knn
-    pred <- as.character(class::knn(data_train[, 1:(length(data)-3)],
-                             data_test[, 1:(length(data)-3)],
+    pred <- as.character(class::knn(data_train[, 1:last_index],
+                             data_test[, 1:last_index],
                              cl = data_train_labs, k = k_nn))
 
     # Store misclassification rate
