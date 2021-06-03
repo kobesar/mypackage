@@ -4,7 +4,7 @@
 #' data frame given number of folds
 #'
 #' @param k Numeric indicating number of folds
-#' @keywords cross validation
+#' @keywords prediction
 #'
 #' @return Numeric of mean squared error
 #'
@@ -15,12 +15,7 @@
 #' @export
 my_rf_cv <- function(k) {
   # Load in penguin data
-  my_penguins <- load("my_penguins")
-
   penguins <- stats::na.omit(my_penguins)
-
-  # Sets seed of random number generator
-  set.seed(302)
 
   # Generate random folds
   fold <- sample(rep(1:k, length = nrow(penguins)))

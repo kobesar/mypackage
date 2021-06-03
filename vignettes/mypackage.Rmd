@@ -18,3 +18,115 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(mypackage)
 ```
+
+To install `mypackage` onto R, run the following line:
+
+```{r eval = FALSE}
+devtools::install_github("https://github.com/kobesar/mypackage")
+```
+
+To load the package run the following line:
+
+```{r eval = FALSE}
+library(mypackage)
+```
+
+# my_t.test tutorial
+
+`my_t.test` applies the t-test given a vector of values, a character indicating the type of test, and a numeric indicating the testing mean. The alternative can be either "two.sided", "less", or "greater". 
+
+We will use the `lifeExp` column from the `my_gapminder` data to apply a t-test.
+
+First we will perform a t-test in which our alternative hypothesis is that the mean is not 60.
+
+```{r}
+x <- my_gapminder$lifeExp # vector of values
+alternative <- "two.sided" # indicates we are testing 
+mu <- 60 # our mean
+
+my_t.test(x, alternative, mu)
+```
+
+From the returned list, we are able to observe that our p-value is much smaller compared to $\alpha\$, so we are able to reject the null hypothesis that 
+
+Then, we perform our t-test on the alternative hypothesis that the mean is less than 60.
+
+```{r}
+x <- my_gapminder$lifeExp # vector of values
+alternative <- "less" # indicates we are testing 
+mu <- 60 # our mean
+
+my_t.test(x, alternative, mu)
+```
+
+Finally, we perform our t-test on the alternative hypothesis that the mean is more than 60.
+
+```{r}
+x <- my_gapminder$lifeExp # vector of values
+alternative <- "greater" # indicates we are testing 
+mu <- 60 # our mean
+
+my_t.test(x, alternative, mu)
+```
+# my_lm tutorial
+
+`my_lm` applies linear regression given a formula and a dataframe.
+
+Here, we will apply regression to the `lifeExp` variable, from the my_gapminder data, using `gdpPercap` and `continent` as our predictors.
+
+```{r}
+lm <- my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
+lm
+```
+
+Comparison of predicted vs fitted values.
+
+```{r}
+predicted <- predict(lm)
+  
+fitted <- my_gapminder$lifeExp
+```
+# my_knn_cv tutorial
+
+`my_knn_cv` applies k-nearest neighbors cross validation given an output class, covariate dataframe, number of folds, and the number of neighbors.
+
+Make sure to first omit any `NA` rows!
+
+```{r}
+my_penguins <- na.omit(my_penguins)
+
+error_df <- data.frame(matrix(ncol = 3))
+
+colnames(error_df) <- c("k_nn", "cv_error", "train_error")
+
+for (k_nn in 1:10) {
+  cv_error <- my_knn_cv(my_penguins[, 3:6], 
+                        my_penguins$species,
+                        k_nn, 
+                        5)$cv_error
+
+  train_error <- mean(class::knn(my_penguins[, 3:6], 
+                          my_penguins[, 3:6], 
+                          my_penguins$species, 
+                          k_nn) != my_penguins$species)
+  
+  error_df <- rbind(error_df, c(k_nn, cv_error, train_error))
+}
+```
+
+# my_rf_cv tutorial
+
+```{r}
+error_df <- data.frame(matrix(ncol = 2))
+
+colnames(error_df) <- c("k", "cv_error")
+
+for (k in c(2, 5, 10)) {
+  for (i in 1:30) {
+    cv_error <- my_rf_cv(k)$cv_error
+    error_df <- rbind(error_df, c(k, cv_error))
+  }
+}
+
+
+```

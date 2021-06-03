@@ -23,10 +23,9 @@ This function applies k-nearest neighbors cross validation to given
 data frame, true class, n nearest neighbors, and n folds
 }
 \examples{
-penguins <- get("my_penguins")
+my_penguins <- na.omit(my_penguins)
 
-my_knn_cv(penguins[, 3:6], penguins$species, 5, 5)
+my_knn_cv(my_penguins[, 3:6], my_penguins$species, 5, 5)
 
 }
-\keyword{cross}
-\keyword{validation}
+\keyword{prediction}

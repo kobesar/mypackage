@@ -7,20 +7,17 @@
 #' @param cl Vector containing the true class
 #' @param k_nn Numeric indicating the number of neighbors
 #' @param k_cv Numeric indicating the number of colds
-#' @keywords cross validation
+#' @keywords prediction
 #'
 #' @return List of predictions and cross validation error
 #'
 #' @examples
-#' penguins <- get("my_penguins")
+#' my_penguins <- na.omit(my_penguins)
 #'
-#' my_knn_cv(penguins[, 3:6], penguins$species, 5, 5)
+#' my_knn_cv(my_penguins[, 3:6], my_penguins$species, 5, 5)
 #'
 #' @export
 my_knn_cv <- function(train, cl, k_nn, k_cv) {
-
-  # Sets seed of random number generator
-  set.seed(302)
 
   # Generate random folds
   fold <- sample(rep(1:k_cv, length = length(cl)))

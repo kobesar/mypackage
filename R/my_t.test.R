@@ -5,6 +5,7 @@
 #' @param x Vector
 #' @param alternative Character indicating
 #' @param mu Numeric indicating
+#' @keywords inference
 #'
 #' @return List of test statistic, degrees of freedom, alternative hypothesis,
 #' and p-value

@@ -21,5 +21,4 @@ k <- 5
 my_rf_cv(k)
 
 }
-\keyword{cross}
-\keyword{validation}
+\keyword{prediction}

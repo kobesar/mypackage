@@ -20,6 +20,7 @@ coefficient t-value, coefficient p-value
 This function applies the linear regression
 }
 \examples{
-my_lm(lifeExp ~ gdpPercap + continent, gapminder)
+my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
 
 }
+\keyword{prediction}

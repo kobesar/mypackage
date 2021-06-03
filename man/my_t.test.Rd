@@ -25,3 +25,4 @@ x <- rnorm(10, mean = 0, sd = 1)
 my_t.test(x, "two.sided", 1)
 
 }
+\keyword{inference}

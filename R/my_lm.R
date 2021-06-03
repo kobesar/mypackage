@@ -5,12 +5,13 @@
 #' @param formula A R formula indicating
 #' @param data Dataframe that includes the data the user wants to apply
 #' regression to
+#' @keywords prediction
 #'
 #' @return Table of coefficient estimate, coefficient standard error,
 #' coefficient t-value, coefficient p-value
 #'
 #' @examples
-#'my_lm(lifeExp ~ gdpPercap + continent, gapminder)
+#'my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
 #'
 #' @export
 my_lm <- function(formula, data) {
