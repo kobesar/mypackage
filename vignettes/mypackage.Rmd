@@ -82,8 +82,6 @@ lm
 Comparison of predicted vs fitted values.
 
 ```{r}
-predicted <- predict(lm)
-  
 fitted <- my_gapminder$lifeExp
 ```
 # my_knn_cv tutorial
