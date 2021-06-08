@@ -38,11 +38,13 @@ We will use the `lifeExp` column from the `my_gapminder` data to apply a t-test.
 First we will perform a t-test in which our alternative hypothesis is that the mean is not 60.
 
 ```{r}
+my_gapminder <- mypackage::my_gapminder
+
 x <- my_gapminder$lifeExp # vector of values
 alternative <- "two.sided" # indicates we are testing 
 mu <- 60 # our mean
 
-my_t.test(x, alternative, mu)
+mypackage::my_t.test(x, alternative, mu)
 ```
 
 From the returned list, we are able to observe that our p-value is much smaller compared to $\alpha\$, so we are able to reject the null hypothesis that 
@@ -54,7 +56,7 @@ x <- my_gapminder$lifeExp # vector of values
 alternative <- "less" # indicates we are testing 
 mu <- 60 # our mean
 
-my_t.test(x, alternative, mu)
+mypackage::my_t.test(x, alternative, mu)
 ```
 
 Finally, we perform our t-test on the alternative hypothesis that the mean is more than 60.
@@ -64,7 +66,7 @@ x <- my_gapminder$lifeExp # vector of values
 alternative <- "greater" # indicates we are testing 
 mu <- 60 # our mean
 
-my_t.test(x, alternative, mu)
+mypackage::my_t.test(x, alternative, mu)
 ```
 # my_lm tutorial
 
@@ -73,7 +75,7 @@ my_t.test(x, alternative, mu)
 Here, we will apply regression to the `lifeExp` variable, from the my_gapminder data, using `gdpPercap` and `continent` as our predictors.
 
 ```{r}
-lm <- my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
+lm <- mypackage::my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
 lm
 ```
 
@@ -91,11 +93,10 @@ fit_act <- data.frame(cbind(fitted, my_gapminder$lifeExp))
 
 colnames(fit_act) <- c("fit", "actual")
 
-fit_act %>% 
-  ggplot() +
-  geom_point(aes(fit, actual)) +
-  xlim(c(0, 110)) +
-  ylim(c(0, 110))
+ggplot2::ggplot(fit_act) +
+  ggplot2::geom_point(ggplot2::aes(fit, actual)) +
+  ggplot2::xlim(c(0, 110)) +
+  ggplot2::ylim(c(0, 110))
 
 ```
 
@@ -106,14 +107,14 @@ fit_act %>%
 Make sure to first omit any `NA` rows!
 
 ```{r}
-my_penguins <- na.omit(my_penguins)
+my_penguins <- na.omit(mypackage::my_penguins)
 
 error_df <- data.frame(matrix(ncol = 3))
 
 colnames(error_df) <- c("k_nn", "cv_error", "train_error")
 
 for (k_nn in 1:10) {
-  cv_error <- my_knn_cv(my_penguins[, 3:6], 
+  cv_error <- mypackage::my_knn_cv(my_penguins[, 3:6], 
                         my_penguins$species,
                         k_nn, 
                         5)$cv_error
@@ -136,7 +137,7 @@ colnames(error_df) <- c("k", "cv_error")
 
 for (k in c(2, 5, 10)) {
   for (i in 1:30) {
-    cv_error <- my_rf_cv(k)$cv_error
+    cv_error <- mypackage::my_rf_cv(k)$cv_error
     error_df <- rbind(error_df, c(k, cv_error))
   }
 }
