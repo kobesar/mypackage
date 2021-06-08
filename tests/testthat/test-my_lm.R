@@ -1,3 +1,3 @@
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
+test_that("performs linear regression", {
+  expect_type(my_lm(lifeExp ~ gdpPercap, my_gapminder), "double")
 })
