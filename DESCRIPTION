@@ -26,4 +26,5 @@ Imports:
     class,
     randomForest,
     tibble,
-    magrittr
+    magrittr,
+    ggplot2
