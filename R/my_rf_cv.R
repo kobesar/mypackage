@@ -15,7 +15,7 @@
 #' @export
 my_rf_cv <- function(k) {
   # Load in penguin data
-  penguins <- stats::na.omit(my_penguins)
+  penguins <- stats::na.omit(mypackage::my_penguins)
 
   # Generate random folds
   fold <- sample(rep(1:k, length = nrow(penguins)))
@@ -54,3 +54,5 @@ my_rf_cv <- function(k) {
   # Return result list
   return(res_list)
 }
+
+utils::globalVariables(c("bill_length_mm", "bill_depth_mm", "body_mass_g", "flipper_length_mm"))
