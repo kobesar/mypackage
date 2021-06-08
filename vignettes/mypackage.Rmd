@@ -19,7 +19,7 @@ To install `mypackage` onto R, run the following line:
 
 ```{r eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("https://github.com/kobesar/mypackage")
+devtools::install_github("kobesar/mypackage")
 ```
 
 To load the package run the following line:
