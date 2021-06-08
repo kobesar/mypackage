@@ -1,5 +1,5 @@
 ---
-title: "Project 3: PACKAGE_NAME mypackage"
+title: "mypackage"
 author: "Kobe Sarausad"
 output: rmarkdown::html_vignette
 vignette: >
