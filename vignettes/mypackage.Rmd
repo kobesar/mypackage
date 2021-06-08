@@ -15,13 +15,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(mypackage)
-```
-
 To install `mypackage` onto R, run the following line:
 
 ```{r eval = FALSE}
+# install.packages("devtools")
 devtools::install_github("https://github.com/kobesar/mypackage")
 ```
 
@@ -29,6 +26,7 @@ To load the package run the following line:
 
 ```{r eval = FALSE}
 library(mypackage)
+library(ggplot2)
 ```
 
 # my_t.test tutorial
@@ -79,11 +77,28 @@ lm <- my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
 lm
 ```
 
+The gdpPercap coefficient represents the change in lifeExp per unit increase/decrease in gdpPercap. 
+
 Comparison of predicted vs fitted values.
 
 ```{r}
-fitted <- my_gapminder$lifeExp
+x <- model.matrix(lifeExp ~ gdpPercap + continent, my_gapminder)
+est <- lm[, 1]
+
+fitted <- x %*% est
+
+fit_act <- data.frame(cbind(fitted, my_gapminder$lifeExp))
+
+colnames(fit_act) <- c("fit", "actual")
+
+fit_act %>% 
+  ggplot() +
+  geom_point(aes(fit, actual)) +
+  xlim(c(0, 110)) +
+  ylim(c(0, 110))
+
 ```
+
 # my_knn_cv tutorial
 
 `my_knn_cv` applies k-nearest neighbors cross validation given an output class, covariate dataframe, number of folds, and the number of neighbors.
