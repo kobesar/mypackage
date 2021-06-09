@@ -35,5 +35,8 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(mypackage)
-## basic example code
+
+## perform basic t-test!
+x <- sample(1:5, 100, replace = TRUE)
+my_t.test(x, alternative = "two.sided", mu = 3)
 ```

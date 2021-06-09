@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+install.packages("devtools")
 devtools::install_github("kobesar/mypackage")
 library(mypackage)
 library(ggplot2)
