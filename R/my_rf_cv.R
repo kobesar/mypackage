@@ -49,7 +49,7 @@ my_rf_cv <- function(k) {
   }
 
   # Return mean of result list
-  return(mean(res_list))
+  return(mean(mse_list))
 }
 
 utils::globalVariables(c("bill_length_mm", "bill_depth_mm", "body_mass_g", "flipper_length_mm"))
