@@ -13,6 +13,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+devtools::install_github("kobesar/mypackage")
+library(mypackage)
+library(ggplot2)
+library(dplyr)
+library(class)
 ```
 
 To install `mypackage` onto R, run the following line:
@@ -26,8 +32,19 @@ To load the package run the following line:
 
 ```{r eval = FALSE}
 library(mypackage)
-library(ggplot2)
 ```
+
+In this tutorial, we will be using `ggplot2`, `dplyr`, and `class` to help carry out the tutorial on how to use the functions in `mypackage`.
+
+To run the following packages run the following lines:
+
+```{r eval = FALSE}
+library(ggplot2)
+library(dplyr)
+library(class)
+```
+
+`mypackage` includes functions: `my_t.test`, `my_lm`, `my_knn_cv`, and `my_rf_cv`. It also includes two datasets: `my_penguins` and `my_gapminder`. 
 
 # my_t.test tutorial
 
@@ -38,16 +55,14 @@ We will use the `lifeExp` column from the `my_gapminder` data to apply a t-test.
 First we will perform a t-test in which our alternative hypothesis is that the mean is not 60.
 
 ```{r}
-my_gapminder <- mypackage::my_gapminder
-
 x <- my_gapminder$lifeExp # vector of values
 alternative <- "two.sided" # indicates we are testing 
 mu <- 60 # our mean
 
-mypackage::my_t.test(x, alternative, mu)
+my_t.test(x, alternative, mu)
 ```
 
-From the returned list, we are able to observe that our p-value is much smaller compared to $\alpha\$, so we are able to reject the null hypothesis that 
+We can see from the printed list that the p-value is larger than our $\alpha$ value of 0.05 so we fail to reject the null hypothesis.
 
 Then, we perform our t-test on the alternative hypothesis that the mean is less than 60.
 
@@ -56,8 +71,10 @@ x <- my_gapminder$lifeExp # vector of values
 alternative <- "less" # indicates we are testing 
 mu <- 60 # our mean
 
-mypackage::my_t.test(x, alternative, mu)
+my_t.test(x, alternative, mu)
 ```
+
+From the returned list, we are able to observe that our p-value is much smaller compared to $\alpha\$, so we are able to reject the null hypothesis that 
 
 Finally, we perform our t-test on the alternative hypothesis that the mean is more than 60.
 
@@ -66,8 +83,11 @@ x <- my_gapminder$lifeExp # vector of values
 alternative <- "greater" # indicates we are testing 
 mu <- 60 # our mean
 
-mypackage::my_t.test(x, alternative, mu)
+my_t.test(x, alternative, mu)
 ```
+
+Since our p-value is far larger than an $\alpha$ value of 0.05, we fail to reject null hypothesis.
+
 # my_lm tutorial
 
 `my_lm` applies linear regression given a formula and a dataframe.
@@ -75,11 +95,13 @@ mypackage::my_t.test(x, alternative, mu)
 Here, we will apply regression to the `lifeExp` variable, from the my_gapminder data, using `gdpPercap` and `continent` as our predictors.
 
 ```{r}
-lm <- mypackage::my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
+lm <- my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
 lm
 ```
 
 The gdpPercap coefficient represents the change in lifeExp per unit increase/decrease in gdpPercap. 
+
+The null hypothesis for the gdpPercap variable is that there is no relationship between gdpPercap and lifeExp. However, we can see that our p-value for gdpPercap is smaller than an $\alpha$ value of 0.05, meaning we can reject the null hypothesis. This means that adding gdpPercap to this model is meaningful when predicting lifeExp and that there is some kind of meaningful relationship between gdpPercap and lifeExp.
 
 Comparison of predicted vs fitted values.
 
@@ -93,12 +115,13 @@ fit_act <- data.frame(cbind(fitted, my_gapminder$lifeExp))
 
 colnames(fit_act) <- c("fit", "actual")
 
-ggplot2::ggplot(fit_act) +
-  ggplot2::geom_point(ggplot2::aes(fit, actual)) +
-  ggplot2::xlim(c(0, 110)) +
-  ggplot2::ylim(c(0, 110))
-
+ggplot(fit_act) +
+  geom_point(ggplot2::aes(fit, actual)) +
+  xlim(c(0, 110)) +
+  ylim(c(0, 110))
 ```
+
+Since the slope isn't 1:1, it seems like we have a underfit model as the actual values have larger values than the fitted values.
 
 # my_knn_cv tutorial
 
@@ -106,41 +129,60 @@ ggplot2::ggplot(fit_act) +
 
 Make sure to first omit any `NA` rows!
 
+Here, we are predicting our output class, `species`, with a 5-fold cross validation, and recording the testing and training errors for k-nearest neighbors 1 to 10. To do this, we are using a for-loop to loop to call our `my_knn_cv` function 10 times.
+
 ```{r}
 my_penguins <- na.omit(mypackage::my_penguins)
 
-error_df <- data.frame(matrix(ncol = 3))
+cv_error <- c()
 
-colnames(error_df) <- c("k_nn", "cv_error", "train_error")
+train_error <- c()
 
 for (k_nn in 1:10) {
-  cv_error <- mypackage::my_knn_cv(my_penguins[, 3:6], 
+  cv_error[k_nn] <- my_knn_cv(my_penguins[, 3:6], 
                         my_penguins$species,
                         k_nn, 
                         5)$cv_error
 
-  train_error <- mean(class::knn(my_penguins[, 3:6], 
+  train_error[k_nn] <- mean(knn(my_penguins[, 3:6], 
                           my_penguins[, 3:6], 
                           my_penguins$species, 
                           k_nn) != my_penguins$species)
-  
-  error_df <- rbind(error_df, c(k_nn, cv_error, train_error))
 }
+
+error_df_knn <- data.frame(
+  k_nn = 1:10,
+  cv_error = cv_error,
+  train_error = train_error
+)
+
+error_df_knn
 ```
 
 # my_rf_cv tutorial
 
 ```{r}
-error_df <- data.frame(matrix(ncol = 2))
-
-colnames(error_df) <- c("k", "cv_error")
-
+k_cv <- c()
+cv_error <- c()
+  
 for (k in c(2, 5, 10)) {
   for (i in 1:30) {
-    cv_error <- mypackage::my_rf_cv(k)$cv_error
-    error_df <- rbind(error_df, c(k, cv_error))
+    cv_error <- append(cv_error, my_rf_cv(k)$cv_error)
+    k_cv <- append(k_cv, k)
   }
 }
 
+error_df_rf <- data.frame(
+  k = k_cv,
+  cv_error = cv_error
+)
 
+ggplot(error_df_rf) +
+  geom_boxplot(ggplot2::aes(x = cv_error, y = as.factor(k)))
+
+error_df_rf %>% 
+  group_by(k) %>% 
+  summarize(mean = mean(cv_error), sd = sd(cv_error))
 ```
+
+We can see that the variance decreases as we increase k value. This is seen in the decrease in standard deviation and the smaller boxplots. 
