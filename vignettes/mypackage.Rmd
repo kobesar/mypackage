@@ -30,10 +30,19 @@ To install `mypackage` onto R, run the following line:
 devtools::install_github("kobesar/mypackage")
 ```
 
-To load the package run the following line:
+To load the `mypackage` run the following line:
 
 ```{r eval = FALSE}
 library(mypackage)
+```
+
+`mypackage` includes functions: `my_t.test`, `my_lm`, `my_knn_cv`, and `my_rf_cv`. It also includes two datasets: `my_penguins` and `my_gapminder`. 
+
+We can load the datasets with the following lines:
+
+```{r eval = FALSE}
+data("my_penguins")
+data("my_gapminder")
 ```
 
 In this tutorial, we will be using `ggplot2`, `dplyr`, and `class` to help carry out the tutorial on how to use the functions in `mypackage`.
@@ -44,15 +53,6 @@ To run the following packages run the following lines:
 library(ggplot2)
 library(dplyr)
 library(class)
-```
-
-`mypackage` includes functions: `my_t.test`, `my_lm`, `my_knn_cv`, and `my_rf_cv`. It also includes two datasets: `my_penguins` and `my_gapminder`. 
-
-We can load the datasets with the following lines:
-
-```{r eval = FALSE}
-data("my_penguins")
-data("my_gapminder")
 ```
 
 # my_t.test tutorial
@@ -167,6 +167,10 @@ error_df_knn <- data.frame(
 
 error_df_knn
 ```
+
+Based on cv_error I would choose 
+
+Based on testing error I would choose
 
 # my_rf_cv tutorial
 

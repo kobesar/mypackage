@@ -51,7 +51,7 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
 
   # Make result table
   res_list <- list("n_neighbors" = k_nn, "n_clusters" = k_cv,
-                   "class" = data$pred, "cv_error" = mean(miss_rate))
+                   "class" = data, "cv_error" = mean(miss_rate))
 
   # Return matrix
   return(res_list)
