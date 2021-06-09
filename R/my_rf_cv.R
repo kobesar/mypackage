@@ -48,11 +48,8 @@ my_rf_cv <- function(k) {
     mse_list[i] <- mean(mse)
   }
 
-  # Store mean mse
-  res_list <- list("cv_error" = mean(mse_list))
-
-  # Return result list
-  return(res_list)
+  # Return mean of result list
+  return(mean(res_list))
 }
 
 utils::globalVariables(c("bill_length_mm", "bill_depth_mm", "body_mass_g", "flipper_length_mm"))

@@ -180,7 +180,7 @@ cv_error <- c()
   
 for (k in c(2, 5, 10)) {
   for (i in 1:30) {
-    cv_error <- append(cv_error, my_rf_cv(k)$cv_error)
+    cv_error <- append(cv_error, my_rf_cv(k))
     k_cv <- append(k_cv, k)
   }
 }

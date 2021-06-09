@@ -6,7 +6,7 @@
 #' @param train Dataframe containing the data used to predict
 #' @param cl Vector containing the true class
 #' @param k_nn Numeric indicating the number of neighbors
-#' @param k_cv Numeric indicating the number of colds
+#' @param k_cv Numeric indicating the number of folds
 #' @keywords prediction
 #'
 #' @return List of predictions and cross validation error

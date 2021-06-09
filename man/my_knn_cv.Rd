@@ -13,7 +13,7 @@ my_knn_cv(train, cl, k_nn, k_cv)
 
 \item{k_nn}{Numeric indicating the number of neighbors}
 
-\item{k_cv}{Numeric indicating the number of colds}
+\item{k_cv}{Numeric indicating the number of folds}
 }
 \value{
 List of predictions and cross validation error
