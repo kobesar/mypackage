@@ -61,7 +61,7 @@ library(class)
 
 We will use the `lifeExp` column from the `my_gapminder` data to apply a t-test.
 
-First we will perform a t-test in which our alternative hypothesis is that the mean is not 60.
+First we will perform a two sided t-test where our alternative hypothesis states that the true mean is not equal to 60.
 
 ```{r}
 x <- my_gapminder$lifeExp # vector of values
@@ -83,9 +83,9 @@ mu <- 60 # our mean
 my_t.test(x, alternative, mu)
 ```
 
-From the returned list, we are able to observe that our p-value is much smaller compared to $\alpha\$, so we are able to reject the null hypothesis that 
+From the returned list, we are able to observe that our p-value is much smaller compared to $\alpha\$, so we are able to reject the null hypothesis that the true mean is greater than 60.
 
-Finally, we perform our t-test on the alternative hypothesis that the mean is more than 60.
+Finally, we perform our t-test on the alternative hypothesis that the mean is greater than 60.
 
 ```{r}
 x <- my_gapminder$lifeExp # vector of values
@@ -95,7 +95,7 @@ mu <- 60 # our mean
 my_t.test(x, alternative, mu)
 ```
 
-Since our p-value is far larger than an $\alpha$ value of 0.05, we fail to reject null hypothesis.
+Since our p-value is far larger than an $\alpha$ value of 0.05, we fail to reject null hypothesis that the mean is less than 60.
 
 # my_lm tutorial
 
@@ -104,33 +104,33 @@ Since our p-value is far larger than an $\alpha$ value of 0.05, we fail to rejec
 Here, we will apply regression to the `lifeExp` variable, from the my_gapminder data, using `gdpPercap` and `continent` as our predictors.
 
 ```{r}
-lm <- my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
-lm
+lm <- my_lm(lifeExp ~ gdpPercap + continent, my_gapminder) # call my_lm to get linear model
+lm # print out model
 ```
 
-The gdpPercap coefficient represents the change in lifeExp per unit increase/decrease in gdpPercap. 
+From the linear model table, we can observe the many values associated with it. The gdpPercap coefficient represents the change in lifeExp per unit increase/decrease in gdpPercap. The p-value is also computed with the linear model, meaning that there is a hypothesis related to each variable. The null hypothesis for the gdpPercap variable is that there is no relationship between gdpPercap and lifeExp. However, we can see that our p-value for gdpPercap is smaller than an $\alpha$ value of 0.05, meaning we can reject the null hypothesis that there is no relationship. This means that adding gdpPercap to this model is meaningful when predicting lifeExp and that there is some kind of meaningful relationship between gdpPercap and lifeExp.
 
-The null hypothesis for the gdpPercap variable is that there is no relationship between gdpPercap and lifeExp. However, we can see that our p-value for gdpPercap is smaller than an $\alpha$ value of 0.05, meaning we can reject the null hypothesis. This means that adding gdpPercap to this model is meaningful when predicting lifeExp and that there is some kind of meaningful relationship between gdpPercap and lifeExp.
-
-Comparison of predicted vs fitted values.
+We are able to take this model and compute the fitted values. So, to better understand how well this model did, we can plot these points on a plot.
 
 ```{r}
-x <- model.matrix(lifeExp ~ gdpPercap + continent, my_gapminder)
-est <- lm[, 1]
+x <- model.matrix(lifeExp ~ gdpPercap + continent, my_gapminder) # model matrix
+est <- lm[, 1] # coefficients from linear model 
 
-fitted <- x %*% est
+fitted <- x %*% est # predicted values
 
-fit_act <- data.frame(cbind(fitted, my_gapminder$lifeExp))
+# put the fitted and real values into one dataframe
+fit_act <- data.frame(cbind(fitted, my_gapminder$lifeExp)) 
 
-colnames(fit_act) <- c("fit", "actual")
+colnames(fit_act) <- c("fit", "actual") # rename columns
 
+# plot the fitted and actual values on scatterplot!
 ggplot(fit_act) +
   geom_point(ggplot2::aes(fit, actual)) +
   xlim(c(0, 110)) +
   ylim(c(0, 110))
 ```
 
-Since the slope isn't 1:1, it seems like we have a underfit model as the actual values have larger values than the fitted values.
+Since the slope isn't 1:1, it seems like we have a underfit model as the actual values have larger values than the fitted values. We can also see that the points seem to be grouped up in different areas, by continent in this case.
 
 # my_knn_cv tutorial
 
@@ -141,61 +141,76 @@ Make sure to first omit any `NA` rows!
 Here, we are predicting our output class, `species`, with a 5-fold cross validation, and recording the testing and training errors for k-nearest neighbors 1 to 10. To do this, we are using a for-loop to loop to call our `my_knn_cv` function 10 times.
 
 ```{r}
-my_penguins <- na.omit(mypackage::my_penguins)
+my_penguins <- na.omit(mypackage::my_penguins) # load data and omit NAs
 
-cv_error <- c()
+cv_error <- c() # initialize cv error vector
 
-train_error <- c()
+train_error <- c() # intialize training error vector
 
+# loop through 10 times
 for (k_nn in 1:10) {
+  # compute cv error for k_nn neighbors
   cv_error[k_nn] <- my_knn_cv(my_penguins[, 3:6], 
                         my_penguins$species,
                         k_nn, 
                         5)$cv_error
 
+  # compute training error for k_nn neighbors
   train_error[k_nn] <- mean(knn(my_penguins[, 3:6], 
                           my_penguins[, 3:6], 
                           my_penguins$species, 
                           k_nn) != my_penguins$species)
 }
 
+# store into one dataframe
 error_df_knn <- data.frame(
   k_nn = 1:10,
   cv_error = cv_error,
   train_error = train_error
 )
 
-error_df_knn
+error_df_knn # print out dataframe
 ```
 
-Based on cv_error I would choose 
+Based on cv error I would choose k_nn = 1 since it seems to output the lowest error.
 
-Based on testing error I would choose
+Based on testing error I would choose k_nn = 2 since choosing k_nn = 1 is meaningless.
+
+In practice, we would choose k_nn = 2 since we are minimizing our risk to underfitting but also overfitting.
+
+We use cross validation to randomly split data to compare to each other, this way, we are able to gauge the performance of our estimating by analyzing the errors! In particular, we use cross validation to minimize overfitting as we are able to use multiple sets of training data within the dataset to create the best model.
 
 # my_rf_cv tutorial
 
 ```{r}
-k_cv <- c()
-cv_error <- c()
+k_cv <- c() # initialize vector of k folds
+
+cv_error <- c() # initialize cv error vector
   
+# loop through 2, 5, and 10
 for (k in c(2, 5, 10)) {
+  # loop through each number 30 times
   for (i in 1:30) {
-    cv_error <- append(cv_error, my_rf_cv(k))
-    k_cv <- append(k_cv, k)
+    cv_error <- append(cv_error, my_rf_cv(k)) # add recorded error to vector
+    k_cv <- append(k_cv, k) # add k-fold to vector
   }
 }
 
+# put into one dataframe
 error_df_rf <- data.frame(
   k = k_cv,
   cv_error = cv_error
 )
 
+# show a boxplot of the errors
 ggplot(error_df_rf) +
-  geom_boxplot(ggplot2::aes(x = cv_error, y = as.factor(k)))
+  geom_boxplot(aes(x = cv_error, y = as.factor(k))) +
+  labs(x = "CV error", y = "k")
 
+# see a table of the mean and standard deviation of errors for each fold
 error_df_rf %>% 
   group_by(k) %>% 
   summarize(mean = mean(cv_error), sd = sd(cv_error))
 ```
 
-We can see that the variance decreases as we increase k value. This is seen in the decrease in standard deviation and the smaller boxplots. 
+We can see that the variance decreases as we increase k value. This is seen in the decrease in standard deviation and the smaller boxplots. We see this difference because as we use more folds in our cross validation, we begin to overfit our predictions, thus leading to a lower error value. 
