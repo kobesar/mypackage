@@ -129,17 +129,15 @@ ggplot(fit_act) +
   geom_abline(slope = 1, intercept = 0, col = "red", lty = 2)
 ```
 
-Since the slope isn't 1:1, it seems like we have a underfit model as the actual values have larger values than the fitted values. We can also see that the points seem to be grouped up in different areas, by continent in this case.
-
-Since the points do not follow the straight 45 degree line (red dashed line), it does not seem that our model predicts very well. In fact, the points are seem to group up in different continents.
+Since the points do not follow the straight 45 degree line (red dashed line), it does not seem that our model predicts very well. In fact, the points are grouped up into continents as we can see gaps between the groups of points. Further, in these groups, we can see that the points run up and down, not on the dashed red line, meaning that we have pretty big positive and negative residuals. However, it does seem to predict the grouped up points in the 65-80 range pretty well as the points float around the red dashed line and trend up with it. In other words, the fitted values were very similar to the actual values in those ranges.
 
 # my_knn_cv tutorial
 
 `my_knn_cv` applies k-nearest neighbors cross validation given an output class, covariate dataframe, number of folds, and the number of neighbors.
 
-Make sure to first omit any `NA` rows!
-
 Here, we are using the `my_penguins` dataset to predict our output class, `species`, with a 5-fold cross validation, and recording the testing and training errors for k-nearest neighbors 1 to 10. To do this, we are using a for-loop to loop to call our `my_knn_cv` function 10 times.
+
+But first, make sure to omit any `NA` observations!
 
 ```{r}
 my_penguins <- na.omit(mypackage::my_penguins) # load data and omit NAs
@@ -173,11 +171,9 @@ error_df_knn <- data.frame(
 error_df_knn # print out dataframe
 ```
 
-Based on cv error I would choose k_nn = 1 since it seems to yield the lowest error. However, based on testing error I would choose k_nn = 2 since choosing k_nn = 1 for training is meaningless. This is because training error will always be 0 when k_nn = 1 no matter what. Thus, picking the next k_nn with the lowest error would be the wisest choice.
+We use cross validation to randomly split data to compare to each other, this way, we are able to gauge the performance of our models by analyzing the errors! In particular, we use cross validation to minimize overfitting as we are able to use multiple sets of training data within the dataset to create the best model. So, based on the cv error I would choose k_nn = 1 since it seems to yield the lowest error. However, based on testing error I would choose k_nn = 2 since choosing k_nn = 1 for training is meaningless. This is because training error will always be 0 when k_nn = 1 no matter what. Thus, picking the next k_nn with the lowest error would be the wisest choice.
 
 But in practice, we would choose k_nn = 2 since we are minimizing our risk to underfitting but also overfitting.
-
-We use cross validation to randomly split data to compare to each other, this way, we are able to gauge the performance of our models by analyzing the errors! In particular, we use cross validation to minimize overfitting as we are able to use multiple sets of training data within the dataset to create the best model.
 
 # my_rf_cv tutorial
 
@@ -200,7 +196,7 @@ for (k in c(2, 5, 10)) {
 # put into one dataframe
 error_df_rf <- data.frame(
   k = k_cv,
-  cv_error = cv_error
+  cv_error = as.numeric(cv_error)
 )
 
 # show a boxplot of the errors
@@ -208,7 +204,7 @@ ggplot(error_df_rf) +
   geom_boxplot(aes(x = cv_error, y = as.factor(k))) +
   labs(x = "CV error", y = "k")
 
-# see a table of the mean and standard deviation of errors for each fold
+# a table of the mean and standard deviation of errors for each fold
 error_df_rf %>% 
   group_by(k) %>% 
   summarize(mean = mean(cv_error), sd = sd(cv_error))
