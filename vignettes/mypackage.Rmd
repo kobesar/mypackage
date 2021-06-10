@@ -121,16 +121,17 @@ fitted <- x %*% est # predicted values
 # put the fitted and real values into one dataframe
 fit_act <- data.frame(cbind(fitted, my_gapminder$lifeExp)) 
 
-colnames(fit_act) <- c("fit", "actual") # rename columns
+colnames(fit_act) <- c("fitted", "actual") # rename columns
 
 # plot the fitted and actual values on scatterplot!
 ggplot(fit_act) +
-  geom_point(ggplot2::aes(fit, actual)) +
-  xlim(c(0, 110)) +
-  ylim(c(0, 110))
+  geom_point(aes(fitted, actual)) +
+  geom_abline(slope = 1, intercept = 0, col = "red", lty = 2)
 ```
 
 Since the slope isn't 1:1, it seems like we have a underfit model as the actual values have larger values than the fitted values. We can also see that the points seem to be grouped up in different areas, by continent in this case.
+
+Since the points do not follow the straight 45 degree line (red dashed line), it does not seem that our model predicts very well. In fact, the points are seem to group up in different continents.
 
 # my_knn_cv tutorial
 
@@ -138,7 +139,7 @@ Since the slope isn't 1:1, it seems like we have a underfit model as the actual 
 
 Make sure to first omit any `NA` rows!
 
-Here, we are predicting our output class, `species`, with a 5-fold cross validation, and recording the testing and training errors for k-nearest neighbors 1 to 10. To do this, we are using a for-loop to loop to call our `my_knn_cv` function 10 times.
+Here, we are using the `my_penguins` dataset to predict our output class, `species`, with a 5-fold cross validation, and recording the testing and training errors for k-nearest neighbors 1 to 10. To do this, we are using a for-loop to loop to call our `my_knn_cv` function 10 times.
 
 ```{r}
 my_penguins <- na.omit(mypackage::my_penguins) # load data and omit NAs
@@ -152,8 +153,8 @@ for (k_nn in 1:10) {
   # compute cv error for k_nn neighbors
   cv_error[k_nn] <- my_knn_cv(my_penguins[, 3:6], 
                         my_penguins$species,
-                        k_nn, 
-                        5)$cv_error
+                        k_nn = k_nn, 
+                        k_cv = 5)$cv_error
 
   # compute training error for k_nn neighbors
   train_error[k_nn] <- mean(knn(my_penguins[, 3:6], 
@@ -172,15 +173,15 @@ error_df_knn <- data.frame(
 error_df_knn # print out dataframe
 ```
 
-Based on cv error I would choose k_nn = 1 since it seems to output the lowest error.
+Based on cv error I would choose k_nn = 1 since it seems to yield the lowest error. However, based on testing error I would choose k_nn = 2 since choosing k_nn = 1 for training is meaningless. This is because training error will always be 0 when k_nn = 1 no matter what. Thus, picking the next k_nn with the lowest error would be the wisest choice.
 
-Based on testing error I would choose k_nn = 2 since choosing k_nn = 1 is meaningless.
+But in practice, we would choose k_nn = 2 since we are minimizing our risk to underfitting but also overfitting.
 
-In practice, we would choose k_nn = 2 since we are minimizing our risk to underfitting but also overfitting.
-
-We use cross validation to randomly split data to compare to each other, this way, we are able to gauge the performance of our estimating by analyzing the errors! In particular, we use cross validation to minimize overfitting as we are able to use multiple sets of training data within the dataset to create the best model.
+We use cross validation to randomly split data to compare to each other, this way, we are able to gauge the performance of our models by analyzing the errors! In particular, we use cross validation to minimize overfitting as we are able to use multiple sets of training data within the dataset to create the best model.
 
 # my_rf_cv tutorial
+
+`my_rf_cv` applies random forest cross validation to the `my_penguins` dataset given k-folds to predict the species of the penguins. It returns the mean squared error of a given k-fold.
 
 ```{r}
 k_cv <- c() # initialize vector of k folds
