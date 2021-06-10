@@ -23,6 +23,8 @@ data("my_penguins")
 data("my_gapminder")
 ```
 
+`mypackage` is a useful statistical package that includes many useful functions for statistical computing! It includes functions: `my_t.test`, `my_lm`, `my_knn_cv`, and `my_rf_cv`. It also includes two datasets: `my_penguins` and `my_gapminder`. 
+
 To install `mypackage` onto R, run the following line:
 
 ```{r eval = FALSE}
@@ -36,20 +38,19 @@ To load the `mypackage` run the following line:
 library(mypackage)
 ```
 
-`mypackage` includes functions: `my_t.test`, `my_lm`, `my_knn_cv`, and `my_rf_cv`. It also includes two datasets: `my_penguins` and `my_gapminder`. 
-
-We can load the datasets with the following lines:
+We can load `my_penguins` and `my_gapminder` with the following lines:
 
 ```{r eval = FALSE}
 data("my_penguins")
 data("my_gapminder")
 ```
 
-In this tutorial, we will be using `ggplot2`, `dplyr`, and `class` to help carry out the tutorial on how to use the functions in `mypackage`.
+Also, in this tutorial, we will be using `ggplot2`, `dplyr`, and `class` to help demonstrate how to use the functions included in `mypackage`.
 
 To run the following packages run the following lines:
 
 ```{r eval = FALSE}
+# install.packages(c("ggplot", "dplyr", "class"))
 library(ggplot2)
 library(dplyr)
 library(class)
@@ -57,7 +58,7 @@ library(class)
 
 # my_t.test tutorial
 
-`my_t.test` applies the t-test given a vector of values, a character indicating the type of test, and a numeric indicating the testing mean. The alternative can be either "two.sided", "less", or "greater". 
+`my_t.test` performs a t-test, given a vector of values, a character indicating the type of test, and a numeric indicating the testing mean. The alternative can be either "two.sided", "less", or "greater", otherwise, it will throw an error. 
 
 We will use the `lifeExp` column from the `my_gapminder` data to apply a t-test.
 
@@ -71,7 +72,7 @@ mu <- 60 # our mean
 my_t.test(x, alternative, mu)
 ```
 
-We can see from the printed list that the p-value is larger than our $\alpha$ value of 0.05 so we fail to reject the null hypothesis.
+We can see from the printed list that the p-value is larger than our $\alpha$ value of 0.05 so we fail to reject the null hypothesis that the true mean is equal to 60.
 
 Then, we perform our t-test on the alternative hypothesis that the mean is less than 60.
 
@@ -99,7 +100,7 @@ Since our p-value is far larger than an $\alpha$ value of 0.05, we fail to rejec
 
 # my_lm tutorial
 
-`my_lm` applies linear regression given a formula and a dataframe.
+`my_lm` performs linear regression given a formula and a dataframe. A formula will follow this format: `my_lm(dependent variable ~ independent variable + independent variable 2 + ..., data)`.
 
 Here, we will apply regression to the `lifeExp` variable, from the my_gapminder data, using `gdpPercap` and `continent` as our predictors.
 
@@ -133,7 +134,7 @@ Since the points do not follow the straight 45 degree line (red dashed line), it
 
 # my_knn_cv tutorial
 
-`my_knn_cv` applies k-nearest neighbors cross validation given an output class, covariate dataframe, number of folds, and the number of neighbors.
+`my_knn_cv` performs k-nearest neighbors cross validation given an output class, covariate dataframe, number of folds, and the number of neighbors. It will follow this format: `my_knn_cv(data used to predict a column, column to predict, number of neighbors, number of folds)`.
 
 Here, we are using the `my_penguins` dataset to predict our output class, `species`, with a 5-fold cross validation, and recording the testing and training errors for k-nearest neighbors 1 to 10. To do this, we are using a for-loop to loop to call our `my_knn_cv` function 10 times.
 
@@ -173,11 +174,11 @@ error_df_knn # print out dataframe
 
 We use cross validation to randomly split data to compare to each other, this way, we are able to gauge the performance of our models by analyzing the errors! In particular, we use cross validation to minimize overfitting as we are able to use multiple sets of training data within the dataset to create the best model. So, based on the cv error I would choose k_nn = 1 since it seems to yield the lowest error. However, based on testing error I would choose k_nn = 2 since choosing k_nn = 1 for training is meaningless. This is because training error will always be 0 when k_nn = 1 no matter what. Thus, picking the next k_nn with the lowest error would be the wisest choice.
 
-But in practice, we would choose k_nn = 2 since we are minimizing our risk to underfitting but also overfitting.
+Thus, we would choose k_nn = 2 since we are minimizing our risk to underfitting but also overfitting.
 
 # my_rf_cv tutorial
 
-`my_rf_cv` applies random forest cross validation to the `my_penguins` dataset given k-folds to predict the species of the penguins. It returns the mean squared error of a given k-fold.
+`my_rf_cv` performs random forest cross validation to the `my_penguins` dataset given k-folds to predict the species of the penguins. It returns the mean squared error of a given k-fold.
 
 ```{r}
 k_cv <- c() # initialize vector of k folds
